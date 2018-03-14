@@ -1,0 +1,61 @@
+<div class="container">
+  <div class="row" *ngIf="error">
+    <div class="col">
+      <div class="alert alert-danger">
+        {{error}}
+      </div>
+  </div>
+</div>
+
+  <form name="form-signin" class="form-signin" #f="ngForm" (ngSubmit)="signin()" 
+        [ngClass]="{
+          'was-validated': f.invalid && f.dirty,
+          '': f.valid  
+        }"
+    >
+
+    <div class="form-group"  >
+
+      <h2 class="form-signin-heading">Login</h2>
+      <input type="email"  class="form-control" placeholder="Email"  autofocus="" 
+        name="email" [(ngModel)]="authenticationRequestDTO.email" #email="ngModel"
+        required
+        pattern="[^ @]*@[^ @]*">
+
+        <div class="form-control-feedback" 
+          *ngIf="email.invalid && email.dirty" [ngClass]="{
+            'invalid-feedback': email.invalid  && (email.touched || email.dirty), 
+            'valid-feedback': email.valid  && (email.touched || email.dirty) 
+          }"> 
+            Invalid email
+        </div>
+      </div>
+
+      <div class="form-group">
+
+      <input type="password" class="form-control" placeholder="Password"  name="password" 
+      [(ngModel)]="authenticationRequestDTO.password" #password="ngModel"
+          required
+          minlength="8">
+      <div *ngIf="password.errors && (password.dirty || password.touched)" [ngClass]="{
+        'invalid-feedback': password.invalid  && (password.dirty || password.touched), 
+        'valid-feedback': password.valid  && (password.dirty || password.touched)
+      }"> 
+      <p *ngIf="password.errors.required">Password is required</p>
+      <p *ngIf="password.errors.minlength">Password must have 8 digits at least</p>
+      </div>
+      
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" value="remember-me"> Remember me
+        </label>
+      </div>
+      <button class="btn btn-lg btn-primary btn-block" 
+          type="submit" [disabled]="f.invalid || isLoading">
+          <div *ngIf="f.invalid && !isLoading">FILL ALL THE VALUES</div>
+          <div *ngIf="f.valid && !isLoading">SIGN IN</div>
+          <div *ngIf="f.valid && isLoading">LOADING <i class="fa fa-spinner fa-spin"></i></div>
+      </button>
+    </div>
+  </form>
+</div>
